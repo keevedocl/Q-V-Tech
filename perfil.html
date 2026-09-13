@@ -218,8 +218,14 @@
   </footer>
 </div>
 
+<!-- Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
+  const SUPABASE_URL = "https://ytwrvkjwvtpukildqkvn.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_proebV8BLmQCRZFVs122sw_mGijl6vA";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
   function iniciales(nombre){
     return (nombre || "?").trim().split(/\s+/).slice(0,2).map(p => p[0]).join("").toUpperCase();
   }
@@ -243,6 +249,33 @@
     a.rel = "noopener";
     a.innerHTML = `<span class="icono">${icono}</span><span>${texto}</span>`;
     return a;
+  }
+
+  function mapearDesdeBD(row){
+    return {
+      id: row.id,
+      nombre: row.business_name || "",
+      slug: row.slug || "",
+      categoria: row.categoria || "",
+      descripcion: row.description || "",
+      logo: row.logo_url || "",
+      activo: row.active !== false,
+      whatsapp: row.whatsapp || "",
+      telefono: row.phone || "",
+      correo: row.email || "",
+      direccion: row.address || "",
+      google_maps: row.google_maps || "",
+      sitio_web: row.website || "",
+      instagram: row.instagram || "",
+      facebook: row.facebook || "",
+      tiktok: row.tiktok || "",
+      youtube: row.youtube || "",
+      google_reviews: row.google_reviews || "",
+      mostrar_reviews: row.mostrar_reviews === true,
+      menu_url: row.menu_url || "",
+      reservations_url: row.reservations_url || "",
+      botones: Array.isArray(row.botones) ? row.botones : []
+    };
   }
 
   function renderCliente(cliente){
@@ -308,6 +341,12 @@
     if(cliente.sitio_web){
       botonesWrap.appendChild(crearBoton({icono:"🌐", texto:"Sitio web", url:normalizarUrl(cliente.sitio_web)}));
     }
+    if(cliente.menu_url){
+      botonesWrap.appendChild(crearBoton({icono:"📋", texto:"Menú", url:normalizarUrl(cliente.menu_url)}));
+    }
+    if(cliente.reservations_url){
+      botonesWrap.appendChild(crearBoton({icono:"📅", texto:"Reservas", url:normalizarUrl(cliente.reservations_url)}));
+    }
 
     (cliente.botones || []).forEach(b => {
       if(b.titulo && b.url){
@@ -333,64 +372,46 @@
       </div>`;
   }
 
-  function cargarClientes(){
-    try{
-      return JSON.parse(localStorage.getItem("qv_clients") || "[]");
-    }catch(e){
-      return [];
+  async function cargarPerfil(){
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("c");
+
+    if(!slug){
+      renderVacio("No se especificó ningún negocio en el enlace.");
+      return;
+    }
+
+    try {
+      const { data, error } = await supabaseClient
+        .from("client_profiles")
+        .select("*")
+        .eq("slug", slug)
+        .maybeSingle();
+
+      if(error){
+        throw error;
+      }
+
+      if(!data){
+        renderVacio("El perfil que buscas no existe o fue eliminado.");
+        return;
+      }
+
+      const cliente = mapearDesdeBD(data);
+
+      if(cliente.activo){
+        renderCliente(cliente);
+      } else {
+        renderVacio("Este perfil está temporalmente desactivado. Si eres el dueño del negocio, contacta a Q&V Tech.");
+      }
+
+    } catch(err) {
+      console.error(err);
+      renderVacio("Ocurrió un error al cargar la información del negocio.");
     }
   }
 
-  function sembrarClienteDemo(){
-    const demo = {
-      id: "c_demo",
-      slug: "demo",
-      nombre: "Café Don",
-      categoria: "Cafetería",
-      descripcion: "Café de especialidad, pastelería casera y buen ambiente para trabajar o conversar.",
-      logo: "",
-      activo: true,
-      whatsapp: "+56912345678",
-      telefono: "",
-      correo: "",
-      direccion: "",
-      google_maps: "",
-      sitio_web: "",
-      instagram: "",
-      facebook: "",
-      tiktok: "",
-      youtube: "",
-      google_reviews: "",
-      mostrar_reviews: true,
-      botones: [{titulo:"Ver menú", url:"https://cafedon.cl/menu"}],
-      fecha_creacion: new Date().toISOString()
-    };
-    localStorage.setItem("qv_clients", JSON.stringify([demo]));
-    return [demo];
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  const slug = params.get("c");
-  let clientes = cargarClientes();
-
-  if(clientes.length === 0){
-    clientes = sembrarClienteDemo();
-  }
-
-  let cliente = null;
-  if(slug){
-    cliente = clientes.find(c => c.slug === slug);
-  } else {
-    cliente = clientes.find(c => c.activo) || clientes[0];
-  }
-
-  if(cliente && cliente.activo){
-    renderCliente(cliente);
-  } else if(cliente && !cliente.activo){
-    renderVacio("Este perfil está temporalmente desactivado. Si eres el dueño del negocio, contacta a Q&V Tech.");
-  } else {
-    renderVacio("Aún no se ha configurado ningún negocio. Ábrelo con <code>?c=identificador-del-cliente</code> o créalo desde el panel de administración.");
-  }
+  cargarPerfil();
 })();
 </script>
 </body>
