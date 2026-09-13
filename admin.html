@@ -1851,7 +1851,7 @@
 
 
     /* =====================================
-       CERRAR SESIÓN
+       CERRAR SESIÓN (CORREGIDO)
     ====================================== */
 
     btnSalir.addEventListener(
@@ -1866,6 +1866,10 @@
         }
 
         await supabaseClient.auth.signOut();
+        
+        // Limpieza y recarga inmediata para bloquear la pantalla
+        localStorage.clear();
+        window.location.reload();
 
       }
     );
