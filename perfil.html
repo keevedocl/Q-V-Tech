@@ -1,9 +1,13 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Q&V Tech</title>
 
@@ -13,7 +17,12 @@
   >
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
@@ -21,26 +30,38 @@
   >
 
   <style>
+
     :root{
+
       --verde:#4A9B3E;
       --verde-oscuro:#16330F;
       --verde-claro:#8FC46A;
 
       --blanco:#FFFFFF;
+
       --fondo:#3C7F33;
 
-      --texto-suave:rgba(255,255,255,.78);
+      --texto-suave:
+        rgba(255,255,255,.78);
 
-      --sombra:0 20px 60px rgba(0,0,0,.18);
+      --sombra:
+        0 20px 60px rgba(0,0,0,.18);
+
     }
+
 
     *{
+
       box-sizing:border-box;
+
       margin:0;
       padding:0;
+
     }
 
+
     body{
+
       min-height:100vh;
 
       font-family:
@@ -50,11 +71,13 @@
         sans-serif;
 
       background:
+
         radial-gradient(
           circle at top right,
           rgba(143,196,106,.5),
           transparent 35%
         ),
+
         linear-gradient(
           145deg,
           #16330F 0%,
@@ -62,16 +85,25 @@
           #4A9B3E 100%
         );
 
-      color:var(--blanco);
+      color:
+        var(--blanco);
+
     }
+
 
     a{
+
       text-decoration:none;
+
       color:inherit;
+
     }
 
+
     .page{
+
       width:100%;
+
       max-width:620px;
 
       margin:0 auto;
@@ -84,37 +116,57 @@
         30px;
 
       display:flex;
+
       flex-direction:column;
+
     }
 
+
     .brand{
+
       text-align:center;
 
       margin-bottom:28px;
+
     }
 
+
     .brand-mark{
-      font-family:'Space Grotesk',sans-serif;
+
+      font-family:
+        'Space Grotesk',
+        sans-serif;
 
       font-size:1.45rem;
+
       font-weight:700;
 
       letter-spacing:-.5px;
+
     }
 
+
     .brand-tag{
+
       margin-top:5px;
 
       font-size:.82rem;
 
-      color:var(--texto-suave);
+      color:
+        var(--texto-suave);
+
     }
+
 
     #contenido{
+
       width:100%;
+
     }
 
+
     .card{
+
       width:100%;
 
       padding:
@@ -131,26 +183,38 @@
         1px solid
         rgba(255,255,255,.15);
 
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
+      backdrop-filter:
+        blur(14px);
 
-      box-shadow:var(--sombra);
+      -webkit-backdrop-filter:
+        blur(14px);
+
+      box-shadow:
+        var(--sombra);
 
       text-align:center;
+
     }
 
+
     .logo-wrap{
+
       display:flex;
 
       align-items:center;
+
       justify-content:center;
 
       margin-bottom:17px;
+
     }
+
 
     .logo-wrap img,
     .logo-fallback{
+
       width:100px;
+
       height:100px;
 
       border-radius:50%;
@@ -166,26 +230,40 @@
       box-shadow:
         0 10px 35px
         rgba(0,0,0,.2);
+
     }
 
+
     .logo-fallback{
+
       display:flex;
 
       align-items:center;
+
       justify-content:center;
 
-      background:var(--blanco);
+      background:
+        var(--blanco);
 
-      color:var(--verde-oscuro);
+      color:
+        var(--verde-oscuro);
 
-      font-family:'Space Grotesk',sans-serif;
+      font-family:
+        'Space Grotesk',
+        sans-serif;
 
       font-size:30px;
+
       font-weight:700;
+
     }
 
+
     .negocio{
-      font-family:'Space Grotesk',sans-serif;
+
+      font-family:
+        'Space Grotesk',
+        sans-serif;
 
       font-size:2rem;
 
@@ -194,18 +272,24 @@
       margin-bottom:7px;
 
       word-break:break-word;
+
     }
 
+
     .categoria{
+
       font-size:.85rem;
 
       color:
         rgba(255,255,255,.7);
 
       margin-bottom:13px;
+
     }
 
+
     .descripcion{
+
       max-width:480px;
 
       margin:
@@ -218,17 +302,23 @@
       font-size:.95rem;
 
       line-height:1.55;
+
     }
 
+
     .botones{
+
       display:grid;
 
       gap:10px;
 
       width:100%;
+
     }
 
+
     .boton{
+
       width:100%;
 
       min-height:52px;
@@ -236,6 +326,7 @@
       display:flex;
 
       align-items:center;
+
       justify-content:center;
 
       gap:10px;
@@ -248,7 +339,8 @@
 
       background:white;
 
-      color:var(--verde-oscuro);
+      color:
+        var(--verde-oscuro);
 
       font-weight:700;
 
@@ -258,37 +350,52 @@
         transform .15s ease,
         box-shadow .15s ease,
         background .15s ease;
+
     }
 
+
     .boton:hover{
-      transform:translateY(-2px);
+
+      transform:
+        translateY(-2px);
 
       box-shadow:
         0 8px 22px
         rgba(0,0,0,.15);
+
     }
+
 
     .boton:active{
-      transform:translateY(0);
+
+      transform:
+        translateY(0);
+
     }
 
+
     .boton.principal{
+
       background:
         var(--verde-claro);
 
       color:
         var(--verde-oscuro);
+
     }
+
 
     .boton.review{
-      background:
-        #fff;
 
-      color:
-        #333;
+      background:#fff;
+
+      color:#333;
+
     }
 
+
     .icono{
+
       font-size:1.15rem;
 
       width:24px;
@@ -296,9 +403,12 @@
       display:inline-flex;
 
       justify-content:center;
+
     }
 
+
     .estado-vacio{
+
       width:100%;
 
       padding:
@@ -306,36 +416,53 @@
         20px;
 
       text-align:center;
+
     }
 
+
     .estado-vacio h2{
-      font-family:'Space Grotesk',sans-serif;
+
+      font-family:
+        'Space Grotesk',
+        sans-serif;
 
       margin-bottom:10px;
 
       font-size:1.5rem;
+
     }
 
+
     .estado-vacio p{
+
       color:
         var(--texto-suave);
 
       font-size:.9rem;
 
       line-height:1.55;
+
     }
 
+
     .cargando{
+
       text-align:center;
 
-      padding:50px 20px;
+      padding:
+        50px
+        20px;
 
       color:
         var(--texto-suave);
+
     }
 
+
     .spinner{
+
       width:34px;
+
       height:34px;
 
       margin:
@@ -353,15 +480,24 @@
 
       animation:
         girar .8s linear infinite;
+
     }
+
 
     @keyframes girar{
+
       to{
-        transform:rotate(360deg);
+
+        transform:
+          rotate(360deg);
+
       }
+
     }
 
+
     footer{
+
       text-align:center;
 
       margin-top:auto;
@@ -374,58 +510,87 @@
         rgba(255,255,255,.6);
 
       line-height:1.6;
+
     }
 
+
     footer strong{
+
       color:white;
+
     }
+
 
     @media(max-width:480px){
 
       .page{
+
         padding:
           25px
           14px
           25px;
+
       }
 
+
       .card{
+
         padding:
           25px
           17px
           22px;
 
         border-radius:23px;
+
       }
 
+
       .negocio{
+
         font-size:1.7rem;
+
       }
+
 
       .logo-wrap img,
       .logo-fallback{
+
         width:90px;
+
         height:90px;
+
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <div class="page">
+
 
   <div class="brand">
 
     <div class="brand-mark">
+
       Q&amp;V Tech
+
     </div>
 
+
     <div class="brand-tag">
+
       Tu negocio, a un toque de distancia
+
     </div>
 
   </div>
+
 
   <div id="contenido">
 
@@ -439,7 +604,11 @@
 
   </div>
 
-  <footer id="footer" style="display:none;">
+
+  <footer
+    id="footer"
+    style="display:none;"
+  >
 
     Creado por
     <strong>Q&amp;V Tech</strong>
@@ -450,9 +619,18 @@
 
   </footer>
 
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- =========================================
+     SUPABASE
+     ========================================= -->
+
+<script
+  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
 
 <script>
 
@@ -460,17 +638,45 @@
 
   "use strict";
 
+
   /*
    * =========================================
-   * SUPABASE
+   * COMPROBAR SUPABASE
+   * =========================================
+   */
+
+  if(
+    !window.supabase ||
+    typeof window.supabase.createClient !==
+      "function"
+  ){
+
+    console.error(
+      "Supabase no pudo cargarse."
+    );
+
+    renderErrorInicial(
+      "No se pudo conectar con el sistema de perfiles."
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * =========================================
+   * CONFIGURACIÓN SUPABASE
    * =========================================
    */
 
   const SUPABASE_URL =
     "https://ytwrvkjwvtpukildqkvn.supabase.co";
 
+
   const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_proebV8BLmQCRZFVs122sw_mGijl6vA";
+
 
   const supabaseClient =
     window.supabase.createClient(
@@ -494,37 +700,56 @@
         .filter(Boolean)
         .slice(0,2);
 
+
     if(!partes.length){
+
       return "?";
+
     }
 
+
     return partes
-      .map(p => p.charAt(0))
+      .map(
+        p =>
+          p.charAt(0)
+      )
       .join("")
       .toUpperCase();
+
   }
 
 
   function normalizarUrl(url){
 
     if(!url){
+
       return "";
+
     }
+
 
     const valor =
       String(url).trim();
 
+
     if(!valor){
+
       return "";
+
     }
+
 
     if(
       /^https?:\/\//i.test(valor)
     ){
+
       return valor;
+
     }
 
+
     return "https://" + valor;
+
   }
 
 
@@ -534,81 +759,116 @@
       String(numero || "")
         .replace(/[^\d]/g,"");
 
-    /*
-     * Si el número viene como
-     * +56 9...
-     */
-    if(limpio.startsWith("0")){
+
+    if(
+      limpio.startsWith("0")
+    ){
+
       limpio =
         "56" +
         limpio.substring(1);
+
     }
 
-    /*
-     * Si viene como 9XXXXXXXX
-     */
+
     if(
       limpio.length === 9 &&
       limpio.startsWith("9")
     ){
+
       limpio =
         "56" +
         limpio;
+
     }
 
+
+    if(!limpio){
+
+      return "";
+
+    }
+
+
     return "https://wa.me/" + limpio;
+
   }
 
 
   function crearBoton({
+
     icono,
     texto,
     url,
     clase = ""
+
   }){
 
     if(!url){
+
       return null;
+
     }
+
 
     const a =
       document.createElement("a");
 
+
     a.className =
       "boton" +
-      (clase ? " " + clase : "");
+      (
+        clase
+          ? " " + clase
+          : ""
+      );
 
-    a.href = url;
 
-    a.target = "_blank";
+    a.href =
+      url;
 
-    a.rel = "noopener noreferrer";
+
+    a.target =
+      "_blank";
+
+
+    a.rel =
+      "noopener noreferrer";
+
 
     const icon =
       document.createElement("span");
 
+
     icon.className =
       "icono";
+
 
     icon.textContent =
       icono;
 
+
     const label =
       document.createElement("span");
+
 
     label.textContent =
       texto;
 
+
     a.appendChild(icon);
+
     a.appendChild(label);
 
+
     return a;
+
   }
 
 
   /*
    * =========================================
-   * MAPEAR BD
+   * MAPEAR BASE DE DATOS
    * =========================================
    */
 
@@ -702,11 +962,16 @@
         "contenido"
       );
 
-    contenido.innerHTML = "";
+
+    contenido.innerHTML =
+      "";
 
 
     const card =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     card.className =
       "card";
@@ -717,7 +982,10 @@
      */
 
     const logoWrap =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     logoWrap.className =
       "logo-wrap";
@@ -726,14 +994,19 @@
     if(cliente.logo){
 
       const img =
-        document.createElement("img");
+        document.createElement(
+          "img"
+        );
+
 
       img.src =
         cliente.logo;
 
+
       img.alt =
         "Logo de " +
         cliente.nombre;
+
 
       img.onerror =
         function(){
@@ -741,30 +1014,62 @@
           this.style.display =
             "none";
 
+
           logoWrap.innerHTML =
-            `<div class="logo-fallback">${
-              iniciales(cliente.nombre)
-            }</div>`;
+            "";
+
+
+          const fallback =
+            document.createElement(
+              "div"
+            );
+
+
+          fallback.className =
+            "logo-fallback";
+
+
+          fallback.textContent =
+            iniciales(
+              cliente.nombre
+            );
+
+
+          logoWrap.appendChild(
+            fallback
+          );
+
         };
 
-      logoWrap.appendChild(img);
+
+      logoWrap.appendChild(
+        img
+      );
 
     }else{
 
       const fallback =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
+
 
       fallback.className =
         "logo-fallback";
 
+
       fallback.textContent =
-        iniciales(cliente.nombre);
+        iniciales(
+          cliente.nombre
+        );
+
 
       logoWrap.appendChild(
         fallback
       );
 
     }
+
 
     card.appendChild(
       logoWrap
@@ -776,16 +1081,23 @@
      */
 
     const h1 =
-      document.createElement("h1");
+      document.createElement(
+        "h1"
+      );
+
 
     h1.className =
       "negocio";
+
 
     h1.textContent =
       cliente.nombre ||
       "Negocio";
 
-    card.appendChild(h1);
+
+    card.appendChild(
+      h1
+    );
 
 
     /*
@@ -795,15 +1107,23 @@
     if(cliente.categoria){
 
       const cat =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
+
 
       cat.className =
         "categoria";
 
+
       cat.textContent =
         cliente.categoria;
 
-      card.appendChild(cat);
+
+      card.appendChild(
+        cat
+      );
+
     }
 
 
@@ -814,15 +1134,23 @@
     if(cliente.descripcion){
 
       const desc =
-        document.createElement("p");
+        document.createElement(
+          "p"
+        );
+
 
       desc.className =
         "descripcion";
 
+
       desc.textContent =
         cliente.descripcion;
 
-      card.appendChild(desc);
+
+      card.appendChild(
+        desc
+      );
+
     }
 
 
@@ -831,7 +1159,10 @@
      */
 
     const botonesWrap =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     botonesWrap.className =
       "botones";
@@ -846,157 +1177,260 @@
 
       const boton =
         crearBoton({
+
           icono,
           texto,
           url,
           clase
+
         });
 
+
       if(boton){
+
         botonesWrap.appendChild(
           boton
         );
+
       }
+
     }
 
+
+    /*
+     * WHATSAPP
+     */
 
     if(cliente.whatsapp){
 
-      agregarBoton(
-        "💬",
-        "WhatsApp",
+      const whatsappUrl =
         linkWhatsApp(
           cliente.whatsapp
-        ),
-        "principal"
-      );
+        );
+
+
+      if(whatsappUrl){
+
+        agregarBoton(
+
+          "💬",
+
+          "WhatsApp",
+
+          whatsappUrl,
+
+          "principal"
+
+        );
+
+      }
 
     }
 
+
+    /*
+     * TELÉFONO
+     */
 
     if(cliente.telefono){
 
       agregarBoton(
+
         "📞",
+
         "Llamar",
+
         "tel:" +
         cliente.telefono
+
       );
 
     }
 
+
+    /*
+     * INSTAGRAM
+     */
 
     if(cliente.instagram){
 
       agregarBoton(
+
         "📷",
+
         "Instagram",
+
         normalizarUrl(
           cliente.instagram
         )
+
       );
 
     }
 
+
+    /*
+     * FACEBOOK
+     */
 
     if(cliente.facebook){
 
       agregarBoton(
+
         "👍",
+
         "Facebook",
+
         normalizarUrl(
           cliente.facebook
         )
+
       );
 
     }
 
+
+    /*
+     * TIKTOK
+     */
 
     if(cliente.tiktok){
 
       agregarBoton(
+
         "🎵",
+
         "TikTok",
+
         normalizarUrl(
           cliente.tiktok
         )
+
       );
 
     }
 
+
+    /*
+     * YOUTUBE
+     */
 
     if(cliente.youtube){
 
       agregarBoton(
+
         "▶️",
+
         "YouTube",
+
         normalizarUrl(
           cliente.youtube
         )
+
       );
 
     }
 
+
+    /*
+     * CORREO
+     */
 
     if(cliente.correo){
 
       agregarBoton(
+
         "✉️",
+
         "Enviar correo",
+
         "mailto:" +
         cliente.correo
+
       );
 
     }
 
+
+    /*
+     * GOOGLE MAPS
+     */
 
     if(cliente.google_maps){
 
       agregarBoton(
+
         "📍",
+
         "Cómo llegar",
+
         normalizarUrl(
           cliente.google_maps
         )
+
       );
 
     }
 
+
+    /*
+     * SITIO WEB
+     */
 
     if(cliente.sitio_web){
 
       agregarBoton(
+
         "🌐",
+
         "Sitio web",
+
         normalizarUrl(
           cliente.sitio_web
         )
+
       );
 
     }
 
+
+    /*
+     * MENÚ
+     */
 
     if(cliente.menu_url){
 
       agregarBoton(
+
         "📋",
+
         "Menú",
+
         normalizarUrl(
           cliente.menu_url
         )
+
       );
 
     }
 
 
+    /*
+     * RESERVAS
+     */
+
     if(cliente.reservations_url){
 
       agregarBoton(
+
         "📅",
+
         "Reservas",
+
         normalizarUrl(
           cliente.reservations_url
         )
+
       );
 
     }
@@ -1022,11 +1456,15 @@
           ){
 
             agregarBoton(
+
               "🔗",
+
               boton.titulo,
+
               normalizarUrl(
                 boton.url
               )
+
             );
 
           }
@@ -1047,12 +1485,17 @@
     ){
 
       agregarBoton(
+
         "⭐",
+
         "Déjanos una reseña en Google",
+
         normalizarUrl(
           cliente.google_reviews
         ),
+
         "review"
+
       );
 
     }
@@ -1074,15 +1517,85 @@
       "block";
 
 
-    /*
-     * TÍTULO DEL NAVEGADOR
-     */
-
     document.title =
       cliente.nombre
         ? cliente.nombre +
           " | Q&V Tech"
         : "Q&V Tech";
+
+  }
+
+
+  /*
+   * =========================================
+   * ERROR INICIAL
+   * =========================================
+   */
+
+  function renderErrorInicial(
+    mensaje
+  ){
+
+    const contenido =
+      document.getElementById(
+        "contenido"
+      );
+
+
+    if(!contenido){
+
+      return;
+
+    }
+
+
+    contenido.innerHTML =
+      "";
+
+
+    const estado =
+      document.createElement(
+        "div"
+      );
+
+
+    estado.className =
+      "estado-vacio";
+
+
+    const titulo =
+      document.createElement(
+        "h2"
+      );
+
+
+    titulo.textContent =
+      "Página no disponible";
+
+
+    const texto =
+      document.createElement(
+        "p"
+      );
+
+
+    texto.textContent =
+      mensaje;
+
+
+    estado.appendChild(
+      titulo
+    );
+
+
+    estado.appendChild(
+      texto
+    );
+
+
+    contenido.appendChild(
+      estado
+    );
 
   }
 
@@ -1097,50 +1610,8 @@
     mensaje
   ){
 
-    const contenido =
-      document.getElementById(
-        "contenido"
-      );
-
-    contenido.innerHTML = "";
-
-    const estado =
-      document.createElement(
-        "div"
-      );
-
-    estado.className =
-      "estado-vacio";
-
-
-    const titulo =
-      document.createElement(
-        "h2"
-      );
-
-    titulo.textContent =
-      "Página no disponible";
-
-
-    const texto =
-      document.createElement(
-        "p"
-      );
-
-    texto.textContent =
-      mensaje;
-
-
-    estado.appendChild(
-      titulo
-    );
-
-    estado.appendChild(
-      texto
-    );
-
-    contenido.appendChild(
-      estado
+    renderErrorInicial(
+      mensaje
     );
 
   }
@@ -1164,10 +1635,6 @@
       params.get("c");
 
 
-    /*
-     * Limpiar espacios
-     */
-
     slug =
       slug
         ? slug.trim()
@@ -1181,12 +1648,9 @@
       );
 
       return;
+
     }
 
-
-    /*
-     * Mostrar cargando
-     */
 
     document.getElementById(
       "contenido"
@@ -1205,33 +1669,46 @@
 
     try{
 
-      const resultado =
-        await supabaseClient
-
-          .from(
-            "client_profiles"
-          )
-
-          .select("*")
-
-          .eq(
-            "slug",
-            slug
-          )
-
-          .eq(
-            "active",
-            true
-          )
-
-          .maybeSingle();
+      console.log(
+        "Buscando perfil:",
+        slug
+      );
 
 
-      const data =
-        resultado.data;
+      const {
 
-      const error =
-        resultado.error;
+        data,
+
+        error
+
+      } = await supabaseClient
+
+        .from(
+          "client_profiles"
+        )
+
+        .select("*")
+
+        .eq(
+          "slug",
+          slug
+        )
+
+        .eq(
+          "active",
+          true
+        )
+
+        .maybeSingle();
+
+
+      console.log(
+        "Resultado Supabase:",
+        {
+          data,
+          error
+        }
+      );
 
 
       if(error){
@@ -1240,6 +1717,7 @@
           "Error Supabase:",
           error
         );
+
 
         throw new Error(
           error.message ||
@@ -1252,17 +1730,22 @@
       if(!data){
 
         renderVacio(
+
           "El perfil \"" +
           slug +
           "\" no existe o está desactivado."
+
         );
 
         return;
+
       }
 
 
       const cliente =
-        mapearDesdeBD(data);
+        mapearDesdeBD(
+          data
+        );
 
 
       renderCliente(
@@ -1279,7 +1762,9 @@
 
 
       renderVacio(
-        "No se pudo cargar este perfil. Verifica la configuración de Supabase."
+
+        "No se pudo cargar este perfil. Revisa la consola del navegador para ver el error."
+
       );
 
     }
@@ -1295,10 +1780,11 @@
 
   cargarPerfil();
 
+
 })();
 
 </script>
 
+
 </body>
 </html>
-```
