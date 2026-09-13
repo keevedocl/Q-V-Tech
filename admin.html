@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q&V Tech · Administración</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --verde-principal:#3C7F33;
+    --verde-oscuro:#2C5F26;
+    --verde-claro:#6FA84E;
+    --verde-muy-oscuro:#16330F;
+    --blanco:#FFFFFF;
+    --gris-fondo:#F4F6F2;
+    --gris-borde:#DDE3D8;
+    --texto:#233420;
+    --texto-suave:#647160;
+    --peligro:#B3402F;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    font-family:'IBM Plex Sans', sans-serif;
+    background:var(--gris-fondo);
+    color:var(--texto);
+  }
+
+  h1,h2,h3{font-family:'Space Grotesk', sans-serif; margin:0;}
+
+  button, input, select, textarea{font-family:inherit;}
+
+  /* ---------- LOGIN ---------- */
+  #vista-login{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg, var(--verde-principal), var(--verde-muy-oscuro));
+    padding:16px;
+  }
+
+  .login-card{
+    background:var(--blanco);
+    border-radius:20px;
+    padding:36px 28px;
+    width:100%;
+    max-width:340px;
+    box-shadow:0 20px 45px rgba(0,0,0,0.25);
+  }
+
+  .login-brand{
+    text-align:center;
+    margin-bottom:4px;
+    font-weight:700;
+    font-size:1.2rem;
+    color:var(--verde-muy-oscuro);
+  }
+
+  .login-sub{
+    text-align:center;
+    color:var(--texto-suave);
+    font-size:0.85rem;
+    margin-bottom:24px;
+  }
+
+  .campo{
+    margin-bottom:14px;
+  }
+
+  .campo label{
+    display:block;
+    font-size:0.8rem;
+    font-weight:500;
+    margin-bottom:5px;
+    color:var(--texto-suave);
+  }
+
+  .campo input, .campo textarea, .campo select{
+    width:100%;
+    padding:11px 12px;
+    border-radius:10px;
+    border:1px solid var(--gris-borde);
+    font-size:0.9rem;
+    background:var(--blanco);
+    color:var(--texto);
+  }
+
+  .campo textarea{
+    resize:vertical;
+    min-height:70px;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:11px 18px;
+    border-radius:10px;
+    border:none;
+    font-size:0.88rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:filter 0.15s ease, transform 0.1s ease;
+  }
+
+  .btn:hover{filter:brightness(0.95);}
+  .btn:active{transform:translateY(1px);}
+
+  .btn-primario{background:var(--verde-principal); color:var(--blanco); width:100%;}
+  .btn-secundario{background:var(--blanco); color:var(--verde-principal); border:1px solid var(--verde-principal);}
+  .btn-peligro{background:#FBE9E6; color:var(--peligro);}
+  .btn-texto{background:none; color:var(--verde-principal); padding:6px 8px;}
+
+  .login-error{
+    color:var(--peligro);
+    font-size:0.82rem;
+    margin-top:6px;
+    display:none;
+  }
+
+  /* ---------- APP ---------- */
+  #vista-app{display:none;}
+
+  .topbar{
+    background:var(--verde-muy-oscuro);
+    color:var(--blanco);
+    padding:14px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .topbar .marca{font-weight:700; font-size:1.05rem;}
+
+  .contenedor{
+    max-width:1000px;
+    margin:0 auto;
+    padding:22px 16px 60px;
+  }
+
+  .dashboard{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:12px;
+    margin-bottom:22px;
+  }
+
+  .stat{
+    background:var(--blanco);
+    border-radius:14px;
+    padding:16px;
+    text-align:center;
+    border:1px solid var(--gris-borde);
+  }
+
+  .stat .numero{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:1.6rem;
+    font-weight:700;
+    color:var(--verde-principal);
+  }
+
+  .stat .etiqueta{
+    font-size:0.75rem;
+    color:var(--texto-suave);
+    margin-top:2px;
+  }
+
+  .barra-acciones{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:16px;
+    align-items:center;
+  }
+
+  .buscador{
+    flex:1;
+    min-width:180px;
+    padding:11px 14px;
+    border-radius:10px;
+    border:1px solid var(--gris-borde);
+    font-size:0.9rem;
+  }
+
+  .lista-clientes{
+    background:var(--blanco);
+    border-radius:16px;
+    border:1px solid var(--gris-borde);
+    overflow:hidden;
+  }
+
+  .fila-cliente{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 16px;
+    border-bottom:1px solid var(--gris-borde);
+    gap:12px;
+  }
+
+  .fila-cliente:last-child{border-bottom:none;}
+
+  .info-cliente{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+  }
+
+  .mini-logo{
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    background:var(--verde-claro);
+    color:var(--blanco);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:0.85rem;
+    flex-shrink:0;
+    object-fit:cover;
+  }
+
+  .texto-cliente .nombre{font-weight:600; font-size:0.94rem;}
+  .texto-cliente .meta{font-size:0.78rem; color:var(--texto-suave);}
+
+  .badge{
+    font-size:0.7rem;
+    padding:2px 8px;
+    border-radius:20px;
+    font-weight:600;
+    margin-left:8px;
+  }
+
+  .badge.activo{background:#E4F1DE; color:var(--verde-oscuro);}
+  .badge.inactivo{background:#F1E4E4; color:var(--peligro);}
+
+  .acciones-fila{
+    display:flex;
+    gap:6px;
+    flex-shrink:0;
+  }
+
+  .acciones-fila button{
+    background:none;
+    border:1px solid var(--gris-borde);
+    border-radius:8px;
+    padding:7px 10px;
+    font-size:0.78rem;
+    cursor:pointer;
+    color:var(--texto);
+  }
+
+  .acciones-fila button:hover{background:var(--gris-fondo);}
+
+  .vacio-lista{
+    padding:40px 20px;
+    text-align:center;
+    color:var(--texto-suave);
+    font-size:0.9rem;
+  }
+
+  /* ---------- MODAL EDITOR ---------- */
+  .overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(22,51,15,0.45);
+    align-items:flex-start;
+    justify-content:center;
+    padding:24px 12px;
+    overflow-y:auto;
+    z-index:50;
+  }
+
+  .modal{
+    background:var(--gris-fondo);
+    border-radius:18px;
+    width:100%;
+    max-width:920px;
+    padding:22px;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:22px;
+  }
+
+  @media (max-width:760px){
+    .modal{grid-template-columns:1fr;}
+    .dashboard{grid-template-columns:repeat(3,1fr);}
+  }
+
+  .modal-header{
+    grid-column:1/-1;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:4px;
+  }
+
+  .cerrar-modal{
+    background:none;
+    border:none;
+    font-size:1.3rem;
+    cursor:pointer;
+    color:var(--texto-suave);
+  }
+
+  .seccion-form{
+    background:var(--blanco);
+    border-radius:14px;
+    padding:16px;
+    border:1px solid var(--gris-borde);
+    margin-bottom:14px;
+  }
+
+  .seccion-form h3{
+    font-size:0.9rem;
+    margin-bottom:12px;
+    color:var(--verde-oscuro);
+  }
+
+  .fila-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  @media (max-width:480px){
+    .fila-2{grid-template-columns:1fr;}
+  }
+
+  .checkbox-linea{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.85rem;
+    margin-top:4px;
+  }
+
+  .boton-extra-fila{
+    display:grid;
+    grid-template-columns:1fr 1fr auto;
+    gap:8px;
+    margin-bottom:8px;
+  }
+
+  @media (max-width:480px){
+    .boton-extra-fila{grid-template-columns:1fr;}
+  }
+
+  .quitar-boton{
+    background:#FBE9E6;
+    color:var(--peligro);
+    border:none;
+    border-radius:8px;
+    padding:0 12px;
+    cursor:pointer;
+    font-size:0.85rem;
+  }
+
+  .acciones-modal{
+    grid-column:1/-1;
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+  }
+
+  /* ---------- PREVIEW ---------- */
+  .preview-wrap{
+    position:sticky;
+    top:0;
+  }
+
+  .preview-marco{
+    background:linear-gradient(180deg, var(--verde-principal), var(--verde-muy-oscuro));
+    border-radius:20px;
+    padding:24px 16px;
+  }
+
+  .preview-card{
+    background:var(--blanco);
+    border-radius:18px;
+    padding:22px 18px;
+    color:var(--verde-muy-oscuro);
+  }
+
+  .preview-logo-wrap{
+    display:flex;
+    justify-content:center;
+    margin-bottom:10px;
+  }
+
+  .preview-logo{
+    width:64px;
+    height:64px;
+    border-radius:16px;
+    object-fit:cover;
+  }
+
+  .preview-logo-fallback{
+    width:64px;
+    height:64px;
+    border-radius:16px;
+    background:linear-gradient(135deg, var(--verde-principal), var(--verde-claro));
+    color:var(--blanco);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-family:'Space Grotesk', sans-serif;
+  }
+
+  .preview-nombre{
+    text-align:center;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.1rem;
+    margin:4px 0 2px;
+  }
+
+  .preview-categoria{
+    text-align:center;
+    font-size:0.75rem;
+    color:var(--verde-principal);
+    margin-bottom:8px;
+  }
+
+  .preview-descripcion{
+    text-align:center;
+    font-size:0.82rem;
+    color:#4a564a;
+    margin-bottom:16px;
+  }
+
+  .preview-botones{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .preview-boton{
+    background:#F1F6EE;
+    border-radius:12px;
+    padding:10px 14px;
+    font-size:0.82rem;
+    font-weight:500;
+  }
+
+  .preview-boton.principal{background:var(--verde-principal); color:var(--blanco);}
+  .preview-boton.review{background:var(--verde-muy-oscuro); color:var(--blanco);}
+
+  .preview-vacio{
+    text-align:center;
+    font-size:0.8rem;
+    color:#4a564a;
+    padding:20px 0;
+  }
+
+  .preview-slug{
+    text-align:center;
+    font-size:0.72rem;
+    color:var(--texto-suave);
+    margin-top:10px;
+    word-break:break-all;
+  }
+
+  #logo-file{
+    font-size:0.82rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="vista-login">
+  <div class="login-card">
+    <div class="login-brand">Q&V Tech</div>
+    <div class="login-sub">Administración</div>
+    <form id="form-login">
+      <div class="campo">
+        <label for="usuario">Usuario</label>
+        <input type="text" id="usuario" autocomplete="username" required>
+      </div>
+      <div class="campo">
+        <label for="clave">Contraseña</label>
+        <input type="password" id="clave" autocomplete="current-password" required>
+      </div>
+      <div class="login-error" id="login-error">Usuario o contraseña incorrectos.</div>
+      <button type="submit" class="btn btn-primario" style="margin-top:8px;">Iniciar sesión</button>
+    </form>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="vista-app">
+  <div class="topbar">
+    <div class="marca">Q&V Tech · Panel</div>
+    <button class="btn btn-texto" id="btn-cerrar-sesion" style="color:#fff;">Cerrar sesión</button>
+  </div>
+
+  <div class="contenedor">
+    <div class="dashboard">
+      <div class="stat"><div class="numero" id="stat-total">0</div><div class="etiqueta">Clientes</div></div>
+      <div class="stat"><div class="numero" id="stat-activos">0</div><div class="etiqueta">Activos</div></div>
+      <div class="stat"><div class="numero" id="stat-inactivos">0</div><div class="etiqueta">Inactivos</div></div>
+    </div>
+
+    <div class="barra-acciones">
+      <input type="text" class="buscador" id="buscador" placeholder="🔍 Buscar por nombre, categoría o identificador...">
+      <button class="btn btn-primario" id="btn-nuevo">+ Nuevo cliente</button>
+    </div>
+
+    <div class="lista-clientes" id="lista-clientes"></div>
+  </div>
+</div>
+
+<!-- ================= MODAL EDITOR ================= -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-titulo">Nuevo cliente</h2>
+      <button class="cerrar-modal" id="btn-cerrar-modal">✕</button>
+    </div>
+
+    <div>
+      <form id="form-cliente">
+        <input type="hidden" id="cliente-id">
+
+        <div class="seccion-form">
+          <h3>Datos principales</h3>
+          <div class="campo">
+            <label for="f-nombre">Nombre del negocio</label>
+            <input type="text" id="f-nombre" required>
+          </div>
+          <div class="fila-2">
+            <div class="campo">
+              <label for="f-slug">Identificador (URL)</label>
+              <input type="text" id="f-slug" placeholder="ej: restaurante-don-pepe" required>
+            </div>
+            <div class="campo">
+              <label for="f-categoria">Categoría</label>
+              <input type="text" id="f-categoria" placeholder="ej: Restaurante">
+            </div>
+          </div>
+          <div class="campo">
+            <label for="f-descripcion">Descripción</label>
+            <textarea id="f-descripcion"></textarea>
+          </div>
+          <div class="campo">
+            <label for="logo-file">Logo</label>
+            <input type="file" id="logo-file" accept="image/*">
+            <input type="hidden" id="f-logo">
+          </div>
+          <div class="checkbox-linea">
+            <input type="checkbox" id="f-activo" checked>
+            <label for="f-activo" style="margin:0;">Cliente activo</label>
+          </div>
+        </div>
+
+        <div class="seccion-form">
+          <h3>Información de contacto</h3>
+          <div class="fila-2">
+            <div class="campo"><label for="f-whatsapp">WhatsApp</label><input type="text" id="f-whatsapp" placeholder="+56 9 1234 5678"></div>
+            <div class="campo"><label for="f-telefono">Teléfono</label><input type="text" id="f-telefono"></div>
+          </div>
+          <div class="fila-2">
+            <div class="campo"><label for="f-correo">Correo</label><input type="email" id="f-correo"></div>
+            <div class="campo"><label for="f-direccion">Dirección</label><input type="text" id="f-direccion"></div>
+          </div>
+          <div class="fila-2">
+            <div class="campo"><label for="f-maps">Google Maps (enlace)</label><input type="text" id="f-maps"></div>
+            <div class="campo"><label for="f-web">Sitio web</label><input type="text" id="f-web"></div>
+          </div>
+        </div>
+
+        <div class="seccion-form">
+          <h3>Redes sociales</h3>
+          <div class="fila-2">
+            <div class="campo"><label for="f-instagram">Instagram</label><input type="text" id="f-instagram"></div>
+            <div class="campo"><label for="f-facebook">Facebook</label><input type="text" id="f-facebook"></div>
+          </div>
+          <div class="fila-2">
+            <div class="campo"><label for="f-tiktok">TikTok</label><input type="text" id="f-tiktok"></div>
+            <div class="campo"><label for="f-youtube">YouTube</label><input type="text" id="f-youtube"></div>
+          </div>
+        </div>
+
+        <div class="seccion-form">
+          <h3>Google Reviews</h3>
+          <div class="campo">
+            <label for="f-reviews">Enlace de reseñas</label>
+            <input type="text" id="f-reviews">
+          </div>
+          <div class="checkbox-linea">
+            <input type="checkbox" id="f-mostrar-reviews">
+            <label for="f-mostrar-reviews" style="margin:0;">Mostrar botón de reseñas</label>
+          </div>
+        </div>
+
+        <div class="seccion-form">
+          <h3>Botones adicionales</h3>
+          <div id="lista-botones-extra"></div>
+          <button type="button" class="btn btn-secundario" id="btn-agregar-boton" style="margin-top:6px;">+ Agregar botón</button>
+        </div>
+
+        <div class="acciones-modal">
+          <button type="button" class="btn btn-secundario" id="btn-cancelar">Cancelar</button>
+          <button type="submit" class="btn btn-primario" style="width:auto;">Guardar cliente</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="preview-wrap">
+      <div class="preview-marco">
+        <div class="preview-card" id="preview-card"></div>
+      </div>
+      <div class="preview-slug" id="preview-slug"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const USUARIO_ADMIN = "admin";
+  const CLAVE_ADMIN = "QVTech2026";
+  const CLAVE_STORAGE = "qv_clients";
+  const CLAVE_SESION = "qv_admin_session";
+
+  const $ = sel => document.querySelector(sel);
+
+  /* ---------- LOGIN ---------- */
+  const vistaLogin = $("#vista-login");
+  const vistaApp = $("#vista-app");
+
+  function sesionActiva(){
+    return sessionStorage.getItem(CLAVE_SESION) === "1";
+  }
+
+  function mostrarApp(){
+    vistaLogin.style.display = "none";
+    vistaApp.style.display = "block";
+    renderLista();
+  }
+
+  if(sesionActiva()) mostrarApp();
+
+  $("#form-login").addEventListener("submit", e => {
+    e.preventDefault();
+    const u = $("#usuario").value.trim();
+    const p = $("#clave").value;
+    if(u === USUARIO_ADMIN && p === CLAVE_ADMIN){
+      sessionStorage.setItem(CLAVE_SESION, "1");
+      $("#login-error").style.display = "none";
+      mostrarApp();
+    } else {
+      $("#login-error").style.display = "block";
+    }
+  });
+
+  $("#btn-cerrar-sesion").addEventListener("click", () => {
+    sessionStorage.removeItem(CLAVE_SESION);
+    vistaApp.style.display = "none";
+    vistaLogin.style.display = "flex";
+    $("#form-login").reset();
+  });
+
+  /* ---------- DATOS ---------- */
+  function cargarClientes(){
+    try{
+      return JSON.parse(localStorage.getItem(CLAVE_STORAGE) || "[]");
+    }catch(e){
+      return [];
+    }
+  }
+
+  function guardarClientes(clientes){
+    localStorage.setItem(CLAVE_STORAGE, JSON.stringify(clientes));
+  }
+
+  function generarId(){
+    return "c_" + Date.now() + "_" + Math.random().toString(36).slice(2,7);
+  }
+
+  function slugify(texto){
+    return (texto || "")
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+  }
+
+  /* ---------- LISTA / DASHBOARD ---------- */
+  function iniciales(nombre){
+    return (nombre || "?").trim().split(/\s+/).slice(0,2).map(p => p[0]).join("").toUpperCase();
+  }
+
+  function renderLista(){
+    const clientes = cargarClientes();
+    const filtro = ($("#buscador").value || "").toLowerCase().trim();
+
+    $("#stat-total").textContent = clientes.length;
+    $("#stat-activos").textContent = clientes.filter(c => c.activo).length;
+    $("#stat-inactivos").textContent = clientes.filter(c => !c.activo).length;
+
+    const filtrados = clientes.filter(c => {
+      if(!filtro) return true;
+      return (c.nombre || "").toLowerCase().includes(filtro)
+        || (c.categoria || "").toLowerCase().includes(filtro)
+        || (c.slug || "").toLowerCase().includes(filtro);
+    });
+
+    const cont = $("#lista-clientes");
+    cont.innerHTML = "";
+
+    if(filtrados.length === 0){
+      cont.innerHTML = `<div class="vacio-lista">${clientes.length === 0 ? "Aún no tienes clientes. Crea el primero con “+ Nuevo cliente”." : "No hay resultados para esa búsqueda."}</div>`;
+      return;
+    }
+
+    filtrados.forEach(c => {
+      const fila = document.createElement("div");
+      fila.className = "fila-cliente";
+
+      const logoHtml = c.logo
+        ? `<img class="mini-logo" src="${c.logo}" alt="">`
+        : `<div class="mini-logo">${iniciales(c.nombre)}</div>`;
+
+      fila.innerHTML = `
+        <div class="info-cliente">
+          ${logoHtml}
+          <div class="texto-cliente">
+            <div class="nombre">${c.nombre || "(sin nombre)"} <span class="badge ${c.activo ? "activo" : "inactivo"}">${c.activo ? "Activo" : "Inactivo"}</span></div>
+            <div class="meta">${c.categoria || "Sin categoría"} · /${c.slug}</div>
+          </div>
+        </div>
+        <div class="acciones-fila">
+          <button data-accion="ver" data-id="${c.id}">Ver</button>
+          <button data-accion="editar" data-id="${c.id}">Editar</button>
+          <button data-accion="duplicar" data-id="${c.id}">Duplicar</button>
+          <button data-accion="estado" data-id="${c.id}">${c.activo ? "Desactivar" : "Activar"}</button>
+          <button data-accion="eliminar" data-id="${c.id}">Eliminar</button>
+        </div>
+      `;
+      cont.appendChild(fila);
+    });
+  }
+
+  $("#buscador").addEventListener("input", renderLista);
+
+  $("#lista-clientes").addEventListener("click", e => {
+    const btn = e.target.closest("button[data-accion]");
+    if(!btn) return;
+    const id = btn.dataset.id;
+    const accion = btn.dataset.accion;
+    const clientes = cargarClientes();
+    const cliente = clientes.find(c => c.id === id);
+    if(!cliente) return;
+
+    if(accion === "ver"){
+      window.open("perfil.html?c=" + encodeURIComponent(cliente.slug), "_blank");
+    } else if(accion === "editar"){
+      abrirModal(cliente);
+    } else if(accion === "duplicar"){
+      const copia = JSON.parse(JSON.stringify(cliente));
+      copia.id = generarId();
+      copia.nombre = cliente.nombre + " (copia)";
+      copia.slug = slugify(cliente.slug + "-copia-" + Date.now().toString().slice(-4));
+      copia.activo = false;
+      clientes.push(copia);
+      guardarClientes(clientes);
+      renderLista();
+    } else if(accion === "estado"){
+      cliente.activo = !cliente.activo;
+      guardarClientes(clientes);
+      renderLista();
+    } else if(accion === "eliminar"){
+      if(confirm(`¿Eliminar a "${cliente.nombre}"? Esta acción no se puede deshacer.`)){
+        guardarClientes(clientes.filter(c => c.id !== id));
+        renderLista();
+      }
+    }
+  });
+
+  /* ---------- MODAL / FORMULARIO ---------- */
+  const overlay = $("#overlay");
+  let botonesExtra = [];
+  let editandoId = null;
+
+  function abrirModal(cliente){
+    editandoId = cliente ? cliente.id : null;
+    $("#modal-titulo").textContent = cliente ? "Editar cliente" : "Nuevo cliente";
+    $("#form-cliente").reset();
+    $("#f-logo").value = "";
+    botonesExtra = cliente && cliente.botones ? JSON.parse(JSON.stringify(cliente.botones)) : [];
+
+    if(cliente){
+      $("#cliente-id").value = cliente.id;
+      $("#f-nombre").value = cliente.nombre || "";
+      $("#f-slug").value = cliente.slug || "";
+      $("#f-categoria").value = cliente.categoria || "";
+      $("#f-descripcion").value = cliente.descripcion || "";
+      $("#f-logo").value = cliente.logo || "";
+      $("#f-activo").checked = !!cliente.activo;
+      $("#f-whatsapp").value = cliente.whatsapp || "";
+      $("#f-telefono").value = cliente.telefono || "";
+      $("#f-correo").value = cliente.correo || "";
+      $("#f-direccion").value = cliente.direccion || "";
+      $("#f-maps").value = cliente.google_maps || "";
+      $("#f-web").value = cliente.sitio_web || "";
+      $("#f-instagram").value = cliente.instagram || "";
+      $("#f-facebook").value = cliente.facebook || "";
+      $("#f-tiktok").value = cliente.tiktok || "";
+      $("#f-youtube").value = cliente.youtube || "";
+      $("#f-reviews").value = cliente.google_reviews || "";
+      $("#f-mostrar-reviews").checked = !!cliente.mostrar_reviews;
+    } else {
+      $("#cliente-id").value = "";
+      $("#f-activo").checked = true;
+    }
+
+    renderBotonesExtra();
+    actualizarPreview();
+    overlay.style.display = "flex";
+  }
+
+  function cerrarModal(){
+    overlay.style.display = "none";
+    editandoId = null;
+  }
+
+  $("#btn-nuevo").addEventListener("click", () => abrirModal(null));
+  $("#btn-cerrar-modal").addEventListener("click", cerrarModal);
+  $("#btn-cancelar").addEventListener("click", cerrarModal);
+  overlay.addEventListener("click", e => { if(e.target === overlay) cerrarModal(); });
+
+  $("#f-nombre").addEventListener("input", () => {
+    if(!editandoId){
+      $("#f-slug").value = slugify($("#f-nombre").value);
+    }
+    actualizarPreview();
+  });
+
+  $("#form-cliente").addEventListener("input", actualizarPreview);
+
+  $("#logo-file").addEventListener("change", e => {
+    const archivo = e.target.files[0];
+    if(!archivo) return;
+    const lector = new FileReader();
+    lector.onload = ev => {
+      $("#f-logo").value = ev.target.result;
+      actualizarPreview();
+    };
+    lector.readAsDataURL(archivo);
+  });
+
+  /* Botones adicionales */
+  function renderBotonesExtra(){
+    const cont = $("#lista-botones-extra");
+    cont.innerHTML = "";
+    botonesExtra.forEach((b, i) => {
+      const fila = document.createElement("div");
+      fila.className = "boton-extra-fila";
+      fila.innerHTML = `
+        <input type="text" placeholder="Título (ej: Ver menú)" value="${b.titulo || ""}" data-campo="titulo" data-i="${i}">
+        <input type="text" placeholder="Enlace https://..." value="${b.url || ""}" data-campo="url" data-i="${i}">
+        <button type="button" class="quitar-boton" data-i="${i}">✕</button>
+      `;
+      cont.appendChild(fila);
+    });
+  }
+
+  $("#btn-agregar-boton").addEventListener("click", () => {
+    botonesExtra.push({titulo:"", url:""});
+    renderBotonesExtra();
+  });
+
+  $("#lista-botones-extra").addEventListener("input", e => {
+    const campo = e.target.dataset.campo;
+    const i = e.target.dataset.i;
+    if(campo === undefined || i === undefined) return;
+    botonesExtra[i][campo] = e.target.value;
+    actualizarPreview();
+  });
+
+  $("#lista-botones-extra").addEventListener("click", e => {
+    if(e.target.classList.contains("quitar-boton")){
+      botonesExtra.splice(Number(e.target.dataset.i), 1);
+      renderBotonesExtra();
+      actualizarPreview();
+    }
+  });
+
+  /* ---------- PREVIEW ---------- */
+  function leerFormulario(){
+    return {
+      nombre: $("#f-nombre").value.trim(),
+      slug: slugify($("#f-slug").value),
+      categoria: $("#f-categoria").value.trim(),
+      descripcion: $("#f-descripcion").value.trim(),
+      logo: $("#f-logo").value,
+      activo: $("#f-activo").checked,
+      whatsapp: $("#f-whatsapp").value.trim(),
+      telefono: $("#f-telefono").value.trim(),
+      correo: $("#f-correo").value.trim(),
+      direccion: $("#f-direccion").value.trim(),
+      google_maps: $("#f-maps").value.trim(),
+      sitio_web: $("#f-web").value.trim(),
+      instagram: $("#f-instagram").value.trim(),
+      facebook: $("#f-facebook").value.trim(),
+      tiktok: $("#f-tiktok").value.trim(),
+      youtube: $("#f-youtube").value.trim(),
+      google_reviews: $("#f-reviews").value.trim(),
+      mostrar_reviews: $("#f-mostrar-reviews").checked,
+      botones: botonesExtra.filter(b => b.titulo && b.url)
+    };
+  }
+
+  function actualizarPreview(){
+    const d = leerFormulario();
+    const card = $("#preview-card");
+
+    if(!d.nombre){
+      card.innerHTML = `<div class="preview-vacio">Completa el nombre del negocio para ver la vista previa.</div>`;
+      $("#preview-slug").textContent = "";
+      return;
+    }
+
+    const logoHtml = d.logo
+      ? `<img class="preview-logo" src="${d.logo}" alt="">`
+      : `<div class="preview-logo-fallback">${iniciales(d.nombre)}</div>`;
+
+    let botonesHtml = "";
+    if(d.whatsapp) botonesHtml += `<div class="preview-boton principal">💬 WhatsApp</div>`;
+    if(d.telefono) botonesHtml += `<div class="preview-boton">📞 Llamar</div>`;
+    if(d.instagram) botonesHtml += `<div class="preview-boton">📷 Instagram</div>`;
+    if(d.facebook) botonesHtml += `<div class="preview-boton">👍 Facebook</div>`;
+    if(d.tiktok) botonesHtml += `<div class="preview-boton">🎵 TikTok</div>`;
+    if(d.youtube) botonesHtml += `<div class="preview-boton">▶️ YouTube</div>`;
+    if(d.correo) botonesHtml += `<div class="preview-boton">✉️ Enviar correo</div>`;
+    if(d.google_maps) botonesHtml += `<div class="preview-boton">📍 Cómo llegar</div>`;
+    if(d.sitio_web) botonesHtml += `<div class="preview-boton">🌐 Sitio web</div>`;
+    d.botones.forEach(b => botonesHtml += `<div class="preview-boton">🔗 ${b.titulo}</div>`);
+    if(d.mostrar_reviews && d.google_reviews) botonesHtml += `<div class="preview-boton review">⭐ Déjanos una reseña en Google</div>`;
+
+    if(!botonesHtml){
+      botonesHtml = `<div class="preview-vacio">Agrega WhatsApp, redes sociales u otro contacto para ver botones aquí.</div>`;
+    }
+
+    card.innerHTML = `
+      <div class="preview-logo-wrap">${logoHtml}</div>
+      <div class="preview-nombre">${d.nombre}</div>
+      ${d.categoria ? `<div class="preview-categoria">${d.categoria}</div>` : ""}
+      ${d.descripcion ? `<div class="preview-descripcion">${d.descripcion}</div>` : ""}
+      <div class="preview-botones">${botonesHtml}</div>
+    `;
+
+    $("#preview-slug").textContent = d.slug ? "perfil.html?c=" + d.slug : "";
+  }
+
+  /* ---------- GUARDAR ---------- */
+  $("#form-cliente").addEventListener("submit", e => {
+    e.preventDefault();
+    const datos = leerFormulario();
+
+    if(!datos.slug){
+      alert("El identificador (URL) no puede quedar vacío.");
+      return;
+    }
+
+    const clientes = cargarClientes();
+    const idActual = $("#cliente-id").value;
+
+    const duplicado = clientes.find(c => c.slug === datos.slug && c.id !== idActual);
+    if(duplicado){
+      alert("Ya existe un cliente con ese identificador. Elige otro.");
+      return;
+    }
+
+    if(idActual){
+      const idx = clientes.findIndex(c => c.id === idActual);
+      clientes[idx] = Object.assign({}, clientes[idx], datos);
+    } else {
+      datos.id = generarId();
+      datos.fecha_creacion = new Date().toISOString();
+      clientes.push(datos);
+    }
+
+    guardarClientes(clientes);
+    cerrarModal();
+    renderLista();
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q&V Tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --verde-principal:#3C7F33;
+    --verde-oscuro:#2C5F26;
+    --verde-claro:#6FA84E;
+    --verde-muy-oscuro:#16330F;
+    --blanco:#FFFFFF;
+    --texto-suave:rgba(255,255,255,0.78);
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'IBM Plex Sans', sans-serif;
+    background:
+      radial-gradient(circle at 15% 0%, var(--verde-claro) 0%, transparent 45%),
+      linear-gradient(180deg, var(--verde-principal) 0%, var(--verde-muy-oscuro) 100%);
+    background-attachment:fixed;
+    color:var(--blanco);
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 48px;
+  }
+
+  .page{
+    width:100%;
+    max-width:420px;
+  }
+
+  .brand{
+    text-align:center;
+    margin-bottom:28px;
+  }
+
+  .brand-mark{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.15rem;
+    letter-spacing:0.02em;
+  }
+
+  .brand-tag{
+    margin-top:4px;
+    font-size:0.82rem;
+    color:var(--texto-suave);
+  }
+
+  .card{
+    background:var(--blanco);
+    color:var(--verde-muy-oscuro);
+    border-radius:24px;
+    padding:32px 24px 28px;
+    box-shadow:0 20px 45px rgba(0,0,0,0.28);
+    animation:rise 0.5s ease-out both;
+  }
+
+  @keyframes rise{
+    from{opacity:0; transform:translateY(14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .logo-wrap{
+    display:flex;
+    justify-content:center;
+    margin-bottom:14px;
+  }
+
+  .logo-wrap img{
+    width:84px;
+    height:84px;
+    border-radius:20px;
+    object-fit:cover;
+    box-shadow:0 6px 16px rgba(22,51,15,0.18);
+  }
+
+  .logo-fallback{
+    width:84px;
+    height:84px;
+    border-radius:20px;
+    background:linear-gradient(135deg, var(--verde-principal), var(--verde-claro));
+    color:var(--blanco);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.6rem;
+  }
+
+  h1.negocio{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:1.45rem;
+    font-weight:700;
+    text-align:center;
+    margin:6px 0 2px;
+    line-height:1.25;
+  }
+
+  .categoria{
+    text-align:center;
+    font-size:0.82rem;
+    color:var(--verde-principal);
+    font-weight:500;
+    margin-bottom:10px;
+  }
+
+  .descripcion{
+    text-align:center;
+    font-size:0.92rem;
+    line-height:1.5;
+    color:#3f4a3d;
+    margin:0 0 22px;
+  }
+
+  .botones{
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+  }
+
+  .boton{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    padding:14px 18px;
+    border-radius:16px;
+    border:none;
+    background:#F1F6EE;
+    color:var(--verde-muy-oscuro);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:0.95rem;
+    font-weight:500;
+    text-decoration:none;
+    cursor:pointer;
+    transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+
+  .boton:hover{
+    transform:translateY(-1px);
+    box-shadow:0 8px 18px rgba(22,51,15,0.12);
+    background:#E7F0E3;
+  }
+
+  .boton .icono{
+    width:22px;
+    text-align:center;
+    font-size:1.05rem;
+  }
+
+  .boton.principal{
+    background:var(--verde-principal);
+    color:var(--blanco);
+  }
+
+  .boton.principal:hover{
+    background:var(--verde-oscuro);
+  }
+
+  .boton.review{
+    background:var(--verde-muy-oscuro);
+    color:var(--blanco);
+  }
+
+  .estado-vacio{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--blanco);
+  }
+
+  .estado-vacio h2{
+    font-family:'Space Grotesk', sans-serif;
+    margin-bottom:8px;
+  }
+
+  .estado-vacio p{
+    color:var(--texto-suave);
+    font-size:0.9rem;
+    line-height:1.5;
+  }
+
+  footer{
+    text-align:center;
+    margin-top:26px;
+    font-size:0.78rem;
+    color:var(--texto-suave);
+    line-height:1.6;
+  }
+
+  footer strong{
+    color:var(--blanco);
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="brand">
+    <div class="brand-mark">Q&amp;V Tech</div>
+    <div class="brand-tag">Tu negocio, a un toque de distancia</div>
+  </div>
+
+  <div id="contenido"></div>
+
+  <footer id="footer" style="display:none;">
+    Creado por <strong>Q&amp;V Tech</strong><br>
+    Tu negocio, a un toque de distancia
+  </footer>
+</div>
+
+<script>
+(function(){
+  function iniciales(nombre){
+    return (nombre || "?").trim().split(/\s+/).slice(0,2).map(p => p[0]).join("").toUpperCase();
+  }
+
+  function normalizarUrl(url){
+    if(!url) return "";
+    if(/^https?:\/\//i.test(url)) return url;
+    return "https://" + url;
+  }
+
+  function linkWhatsApp(numero){
+    const limpio = (numero || "").replace(/[^\d]/g, "");
+    return "https://wa.me/" + limpio;
+  }
+
+  function crearBoton({icono, texto, url, clase}){
+    const a = document.createElement("a");
+    a.className = "boton" + (clase ? " " + clase : "");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.innerHTML = `<span class="icono">${icono}</span><span>${texto}</span>`;
+    return a;
+  }
+
+  function renderCliente(cliente){
+    const contenido = document.getElementById("contenido");
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const logoWrap = document.createElement("div");
+    logoWrap.className = "logo-wrap";
+    if(cliente.logo){
+      logoWrap.innerHTML = `<img src="${cliente.logo}" alt="Logo de ${cliente.nombre}">`;
+    } else {
+      logoWrap.innerHTML = `<div class="logo-fallback">${iniciales(cliente.nombre)}</div>`;
+    }
+    card.appendChild(logoWrap);
+
+    const h1 = document.createElement("h1");
+    h1.className = "negocio";
+    h1.textContent = cliente.nombre || "Negocio";
+    card.appendChild(h1);
+
+    if(cliente.categoria){
+      const cat = document.createElement("div");
+      cat.className = "categoria";
+      cat.textContent = cliente.categoria;
+      card.appendChild(cat);
+    }
+
+    if(cliente.descripcion){
+      const desc = document.createElement("p");
+      desc.className = "descripcion";
+      desc.textContent = cliente.descripcion;
+      card.appendChild(desc);
+    }
+
+    const botonesWrap = document.createElement("div");
+    botonesWrap.className = "botones";
+
+    if(cliente.whatsapp){
+      botonesWrap.appendChild(crearBoton({icono:"💬", texto:"WhatsApp", url:linkWhatsApp(cliente.whatsapp), clase:"principal"}));
+    }
+    if(cliente.telefono){
+      botonesWrap.appendChild(crearBoton({icono:"📞", texto:"Llamar", url:"tel:" + cliente.telefono}));
+    }
+    if(cliente.instagram){
+      botonesWrap.appendChild(crearBoton({icono:"📷", texto:"Instagram", url:normalizarUrl(cliente.instagram)}));
+    }
+    if(cliente.facebook){
+      botonesWrap.appendChild(crearBoton({icono:"👍", texto:"Facebook", url:normalizarUrl(cliente.facebook)}));
+    }
+    if(cliente.tiktok){
+      botonesWrap.appendChild(crearBoton({icono:"🎵", texto:"TikTok", url:normalizarUrl(cliente.tiktok)}));
+    }
+    if(cliente.youtube){
+      botonesWrap.appendChild(crearBoton({icono:"▶️", texto:"YouTube", url:normalizarUrl(cliente.youtube)}));
+    }
+    if(cliente.correo){
+      botonesWrap.appendChild(crearBoton({icono:"✉️", texto:"Enviar correo", url:"mailto:" + cliente.correo}));
+    }
+    if(cliente.google_maps){
+      botonesWrap.appendChild(crearBoton({icono:"📍", texto:"Cómo llegar", url:normalizarUrl(cliente.google_maps)}));
+    }
+    if(cliente.sitio_web){
+      botonesWrap.appendChild(crearBoton({icono:"🌐", texto:"Sitio web", url:normalizarUrl(cliente.sitio_web)}));
+    }
+
+    (cliente.botones || []).forEach(b => {
+      if(b.titulo && b.url){
+        botonesWrap.appendChild(crearBoton({icono:"🔗", texto:b.titulo, url:normalizarUrl(b.url)}));
+      }
+    });
+
+    if(cliente.mostrar_reviews && cliente.google_reviews){
+      botonesWrap.appendChild(crearBoton({icono:"⭐", texto:"Déjanos una reseña en Google", url:normalizarUrl(cliente.google_reviews), clase:"review"}));
+    }
+
+    card.appendChild(botonesWrap);
+    contenido.appendChild(card);
+    document.getElementById("footer").style.display = "block";
+  }
+
+  function renderVacio(mensaje){
+    const contenido = document.getElementById("contenido");
+    contenido.innerHTML = `
+      <div class="estado-vacio">
+        <h2>Página no disponible</h2>
+        <p>${mensaje}</p>
+      </div>`;
+  }
+
+  function cargarClientes(){
+    try{
+      return JSON.parse(localStorage.getItem("qv_clients") || "[]");
+    }catch(e){
+      return [];
+    }
+  }
+
+  function sembrarClienteDemo(){
+    const demo = {
+      id: "c_demo",
+      slug: "demo",
+      nombre: "Café Don",
+      categoria: "Cafetería",
+      descripcion: "Café de especialidad, pastelería casera y buen ambiente para trabajar o conversar.",
+      logo: "",
+      activo: true,
+      whatsapp: "+56912345678",
+      telefono: "",
+      correo: "",
+      direccion: "",
+      google_maps: "",
+      sitio_web: "",
+      instagram: "",
+      facebook: "",
+      tiktok: "",
+      youtube: "",
+      google_reviews: "",
+      mostrar_reviews: true,
+      botones: [{titulo:"Ver menú", url:"https://cafedon.cl/menu"}],
+      fecha_creacion: new Date().toISOString()
+    };
+    localStorage.setItem("qv_clients", JSON.stringify([demo]));
+    return [demo];
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get("c");
+  let clientes = cargarClientes();
+
+  if(clientes.length === 0){
+    clientes = sembrarClienteDemo();
+  }
+
+  let cliente = null;
+  if(slug){
+    cliente = clientes.find(c => c.slug === slug);
+  } else {
+    cliente = clientes.find(c => c.activo) || clientes[0];
+  }
+
+  if(cliente && cliente.activo){
+    renderCliente(cliente);
+  } else if(cliente && !cliente.activo){
+    renderVacio("Este perfil está temporalmente desactivado. Si eres el dueño del negocio, contacta a Q&V Tech.");
+  } else {
+    renderVacio("Aún no se ha configurado ningún negocio. Ábrelo con <code>?c=identificador-del-cliente</code> o créalo desde el panel de administración.");
+  }
+})();
+</script>
+</body>
+</html>
