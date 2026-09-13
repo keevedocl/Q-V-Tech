@@ -48,6 +48,11 @@
       cursor:pointer;
     }
 
+    button:disabled{
+      opacity:.65;
+      cursor:not-allowed;
+    }
+
     /* =========================
        LOGIN
     ========================= */
@@ -153,6 +158,7 @@
       background:#FDECEC;
       color:var(--rojo);
       font-size:14px;
+      line-height:1.5;
     }
 
     /* =========================
@@ -432,6 +438,7 @@
       text-align:center;
       padding:55px 20px;
       color:var(--texto-suave);
+      line-height:1.5;
     }
 
     /* =========================
@@ -593,6 +600,7 @@
       border:1px solid var(--borde);
       border-radius:9px;
       padding:10px;
+      width:100%;
     }
 
     .btn-quitar{
@@ -732,8 +740,9 @@
       border-radius:11px;
       box-shadow:0 10px 30px rgba(0,0,0,.2);
       display:none;
-      max-width:350px;
+      max-width:380px;
       font-size:14px;
+      line-height:1.4;
     }
 
     .toast.error{
@@ -1704,7 +1713,10 @@
 
       }catch(error){
 
-        console.error(error);
+        console.error(
+          "Error al iniciar:",
+          error
+        );
 
         mostrarLogin();
 
@@ -1773,7 +1785,10 @@
 
         }catch(error){
 
-          console.error(error);
+          console.error(
+            "Error de inicio de sesión:",
+            error
+          );
 
           loginError.textContent =
             obtenerMensajeLogin(error);
@@ -1794,10 +1809,15 @@
 
     function obtenerMensajeLogin(error){
 
-      if(
+      const mensaje =
         error &&
-        error.message &&
-        error.message.toLowerCase().includes("invalid login")
+        error.message
+          ? error.message.toLowerCase()
+          : "";
+
+      if(
+        mensaje.includes("invalid login") ||
+        mensaje.includes("invalid credentials")
       ){
 
         return "Correo o contraseña incorrectos.";
@@ -1805,16 +1825,21 @@
       }
 
       if(
-        error &&
-        error.message &&
-        error.message.toLowerCase().includes("email not confirmed")
+        mensaje.includes("email not confirmed")
       ){
 
         return "El correo todavía no está confirmado en Supabase.";
 
       }
 
-      return "No fue posible iniciar sesión. Revisa tus datos y vuelve a intentarlo.";
+      return (
+        "No fue posible iniciar sesión. " +
+        (
+          error && error.message
+            ? error.message
+            : "Revisa tus datos y vuelve a intentarlo."
+        )
+      );
 
     }
 
@@ -1843,7 +1868,10 @@
       app.style.display = "block";
 
       usuarioLogueado.textContent =
-        session.user.email || "";
+        session &&
+        session.user
+          ? session.user.email || ""
+          : "";
 
       await cargarClientes();
 
@@ -1851,7 +1879,7 @@
 
 
     /* =====================================
-       CERRAR SESIÓN (CORREGIDO)
+       CERRAR SESIÓN
     ====================================== */
 
     btnSalir.addEventListener(
@@ -1865,11 +1893,24 @@
           return;
         }
 
-        await supabaseClient.auth.signOut();
-        
-        // Limpieza y recarga inmediata para bloquear la pantalla
-        localStorage.clear();
-        window.location.reload();
+        try{
+
+          await supabaseClient.auth.signOut();
+
+        }catch(error){
+
+          console.error(
+            "Error al cerrar sesión:",
+            error
+          );
+
+        }finally{
+
+          localStorage.clear();
+
+          window.location.reload();
+
+        }
 
       }
     );
@@ -1913,18 +1954,35 @@
 
       }catch(error){
 
-        console.error(error);
+        console.error(
+          "Error al cargar clientes:",
+          error
+        );
 
         tablaContainer.innerHTML = `
           <div class="vacio">
             <strong>No se pudieron cargar los clientes.</strong>
             <br><br>
-            ${escapeHtml(error.message || "Error desconocido")}
+            ${escapeHtml(
+              error.message ||
+              "Error desconocido"
+            )}
+            <br><br>
+            <small>
+              Código:
+              ${escapeHtml(
+                error.code || "sin código"
+              )}
+            </small>
           </div>
         `;
 
         mostrarToast(
-          "Error al cargar los clientes.",
+          "Error al cargar los clientes: " +
+          (
+            error.message ||
+            "Error desconocido"
+          ),
           true
         );
 
@@ -1941,7 +1999,8 @@
 
       return {
 
-        id: row.id,
+        id:
+          row.id,
 
         nombre:
           row.business_name || "",
@@ -2347,6 +2406,10 @@
         "Guardar cliente";
 
       document.getElementById(
+        "btnGuardar"
+      ).disabled = false;
+
+      document.getElementById(
         "logoPreview"
       ).style.display =
         "none";
@@ -2360,6 +2423,10 @@
         "logoNombre"
       ).textContent =
         "Opcional. PNG, JPG, WEBP o SVG.";
+
+      document.getElementById(
+        "logo"
+      ).value = "";
 
       botonesContainer.innerHTML = "";
 
@@ -2385,6 +2452,10 @@
           );
 
         if(!cliente){
+          mostrarToast(
+            "No se encontró el cliente.",
+            true
+          );
           return;
         }
 
@@ -2395,6 +2466,10 @@
 
         logoActualUrl =
           cliente.logo || null;
+
+        document.getElementById(
+          "logo"
+        ).value = "";
 
         cargarFormulario(cliente);
 
@@ -2407,6 +2482,10 @@
           "btnGuardar"
         ).textContent =
           "Guardar cambios";
+
+        document.getElementById(
+          "btnGuardar"
+        ).disabled = false;
 
         abrirModal();
 
@@ -2516,6 +2595,12 @@
           "logoPreview"
         );
 
+      const previewLogo =
+        document.getElementById(
+          "previewLogo"
+        );
+
+
       if(cliente.logo){
 
         logoPreview.src =
@@ -2524,6 +2609,12 @@
         logoPreview.style.display =
           "block";
 
+        previewLogo.src =
+          cliente.logo;
+
+        previewLogo.style.display =
+          "inline-block";
+
         document.getElementById(
           "logoNombre"
         ).textContent =
@@ -2531,7 +2622,14 @@
 
       }else{
 
+        logoPreview.removeAttribute("src");
+
         logoPreview.style.display =
+          "none";
+
+        previewLogo.removeAttribute("src");
+
+        previewLogo.style.display =
           "none";
 
         document.getElementById(
@@ -2609,47 +2707,72 @@
         }
 
 
-        const datos = construirDatosBD(
-          {
-            ...cliente,
-            slug,
-            nombre:
-              cliente.nombre + " (Copia)"
+        try{
+
+          const datos =
+            construirDatosBD(
+              {
+                ...cliente,
+                slug,
+                nombre:
+                  cliente.nombre + " (Copia)"
+              }
+            );
+
+
+          delete datos.id;
+
+
+          const {
+            data: duplicado,
+            error
+          } = await supabaseClient
+            .from("client_profiles")
+            .insert(datos)
+            .select("*")
+            .single();
+
+
+          if(error){
+            throw error;
           }
-        );
 
 
-        delete datos.id;
-        delete datos.created_at;
-        delete datos.updated_at;
+          if(
+            !duplicado ||
+            duplicado.slug !== slug
+          ){
 
+            throw new Error(
+              "Supabase no confirmó la duplicación del cliente."
+            );
 
-        const {
-          error
-        } = await supabaseClient
-          .from("client_profiles")
-          .insert(datos);
+          }
 
-
-        if(error){
-
-          console.error(error);
 
           mostrarToast(
-            "No se pudo duplicar el cliente.",
+            "Cliente duplicado correctamente."
+          );
+
+          await cargarClientes();
+
+        }catch(error){
+
+          console.error(
+            "Error al duplicar:",
+            error
+          );
+
+          mostrarToast(
+            "No se pudo duplicar el cliente: " +
+            (
+              error.message ||
+              "Error desconocido"
+            ),
             true
           );
 
-          return;
-
         }
-
-
-        mostrarToast(
-          "Cliente duplicado correctamente."
-        );
-
-        await cargarClientes();
 
       };
 
@@ -2674,37 +2797,63 @@
           !cliente.activo;
 
 
-        const {
-          error
-        } = await supabaseClient
-          .from("client_profiles")
-          .update({
-            active: nuevoEstado
-          })
-          .eq("id", cliente.id);
+        try{
+
+          const {
+            data,
+            error
+          } = await supabaseClient
+            .from("client_profiles")
+            .update({
+              active: nuevoEstado
+            })
+            .eq("id", cliente.id)
+            .select("id,slug,active")
+            .single();
 
 
-        if(error){
+          if(error){
+            throw error;
+          }
 
-          console.error(error);
+
+          if(
+            !data ||
+            String(data.id) !== String(cliente.id)
+          ){
+
+            throw new Error(
+              "Supabase no confirmó el cambio de estado."
+            );
+
+          }
+
 
           mostrarToast(
-            "No se pudo cambiar el estado.",
+            nuevoEstado
+              ? "Cliente activado."
+              : "Cliente desactivado."
+          );
+
+          await cargarClientes();
+
+        }catch(error){
+
+          console.error(
+            "Error al cambiar estado:",
+            error
+          );
+
+          mostrarToast(
+            "No se pudo cambiar el estado: " +
+            (
+              error.message ||
+              "Error desconocido"
+            ),
             true
           );
 
-          return;
-
         }
-
-
-        mostrarToast(
-          nuevoEstado
-            ? "Cliente activado."
-            : "Cliente desactivado."
-        );
-
-        await cargarClientes();
 
       };
 
@@ -2735,33 +2884,44 @@
         }
 
 
-        const {
-          error
-        } = await supabaseClient
-          .from("client_profiles")
-          .delete()
-          .eq("id", cliente.id);
+        try{
+
+          const {
+            error
+          } = await supabaseClient
+            .from("client_profiles")
+            .delete()
+            .eq("id", cliente.id);
 
 
-        if(error){
+          if(error){
+            throw error;
+          }
 
-          console.error(error);
 
           mostrarToast(
-            "No se pudo eliminar el cliente.",
+            "Cliente eliminado."
+          );
+
+          await cargarClientes();
+
+        }catch(error){
+
+          console.error(
+            "Error al eliminar:",
+            error
+          );
+
+          mostrarToast(
+            "No se pudo eliminar el cliente: " +
+            (
+              error.message ||
+              "Error desconocido"
+            ),
             true
           );
 
-          return;
-
         }
-
-
-        mostrarToast(
-          "Cliente eliminado."
-        );
-
-        await cargarClientes();
 
       };
 
@@ -2772,6 +2932,18 @@
 
     window.verCliente =
       function(slug){
+
+        if(!slug){
+
+          mostrarToast(
+            "Este cliente no tiene un identificador válido.",
+            true
+          );
+
+          return;
+
+        }
+
 
         window.open(
           "perfil.html?c=" +
@@ -2845,6 +3017,27 @@
 
 
     /* =====================================
+       ESC PARA CERRAR MODAL
+    ====================================== */
+
+    document.addEventListener(
+      "keydown",
+      function(event){
+
+        if(
+          event.key === "Escape" &&
+          modal.classList.contains("abierto")
+        ){
+
+          cerrarModal();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================
        LOGO
     ====================================== */
 
@@ -2900,6 +3093,8 @@
 
             previewLogo.style.display =
               "inline-block";
+
+            actualizarPreview();
 
           };
 
@@ -2968,6 +3163,18 @@
           .getPublicUrl(ruta);
 
 
+      if(
+        !data ||
+        !data.publicUrl
+      ){
+
+        throw new Error(
+          "El logo se subió, pero Supabase no devolvió una URL pública."
+        );
+
+      }
+
+
       return data.publicUrl;
 
     }
@@ -2989,6 +3196,7 @@
 
     /* =====================================
        GUARDAR CLIENTE
+       CORREGIDO
     ====================================== */
 
     clienteForm.addEventListener(
@@ -3002,6 +3210,15 @@
             "btnGuardar"
           );
 
+        const estabaEditando =
+          !!clienteEditando;
+
+        const idEditando =
+          clienteEditando
+            ? clienteEditando.id
+            : null;
+
+
         btnGuardar.disabled = true;
 
         btnGuardar.textContent =
@@ -3009,6 +3226,10 @@
 
 
         try{
+
+          /* =========================
+             DATOS BÁSICOS
+          ========================= */
 
           const nombre =
             document.getElementById(
@@ -3020,8 +3241,15 @@
               "slug"
             ).value.trim();
 
+
           slug =
             normalizarSlug(slug);
+
+
+          document.getElementById(
+            "slug"
+          ).value =
+            slug;
 
 
           if(!nombre){
@@ -3042,23 +3270,40 @@
           }
 
 
-          /* Comprobar slug */
+          /* =========================
+             COMPROBAR SLUG
+          ========================= */
 
-          const query =
+          let query =
             supabaseClient
               .from("client_profiles")
               .select("id,slug");
 
 
+          let resultadoSlug;
+
+
+          if(estabaEditando){
+
+            resultadoSlug =
+              await query
+                .eq("slug", slug)
+                .neq("id", idEditando);
+
+          }else{
+
+            resultadoSlug =
+              await query
+                .eq("slug", slug);
+
+          }
+
+
           const {
             data: slugExistente,
             error: slugError
-          } = clienteEditando
-            ? await query
-                .eq("slug", slug)
-                .neq("id", clienteEditando.id)
-            : await query
-                .eq("slug", slug);
+          } =
+            resultadoSlug;
 
 
           if(slugError){
@@ -3078,7 +3323,9 @@
           }
 
 
-          /* Logo */
+          /* =========================
+             LOGO
+          ========================= */
 
           let logoUrl =
             logoActualUrl;
@@ -3095,130 +3342,192 @@
           }
 
 
-          /* Datos */
+          /* =========================
+             DATOS DEL CLIENTE
+          ========================= */
+
+          const datosBase = {
+
+            nombre,
+
+            slug,
+
+            categoria:
+              document.getElementById(
+                "categoria"
+              ).value.trim(),
+
+            descripcion:
+              document.getElementById(
+                "descripcion"
+              ).value.trim(),
+
+            logo:
+              logoUrl || "",
+
+            activo:
+              document.getElementById(
+                "activo"
+              ).checked,
+
+            whatsapp:
+              document.getElementById(
+                "whatsapp"
+              ).value.trim(),
+
+            telefono:
+              document.getElementById(
+                "telefono"
+              ).value.trim(),
+
+            correo:
+              document.getElementById(
+                "correo"
+              ).value.trim(),
+
+            direccion:
+              document.getElementById(
+                "direccion"
+              ).value.trim(),
+
+            google_maps:
+              document.getElementById(
+                "google_maps"
+              ).value.trim(),
+
+            sitio_web:
+              document.getElementById(
+                "sitio_web"
+              ).value.trim(),
+
+            instagram:
+              document.getElementById(
+                "instagram"
+              ).value.trim(),
+
+            facebook:
+              document.getElementById(
+                "facebook"
+              ).value.trim(),
+
+            tiktok:
+              document.getElementById(
+                "tiktok"
+              ).value.trim(),
+
+            youtube:
+              document.getElementById(
+                "youtube"
+              ).value.trim(),
+
+            google_reviews:
+              document.getElementById(
+                "google_reviews"
+              ).value.trim(),
+
+            mostrar_reviews:
+              document.getElementById(
+                "mostrar_reviews"
+              ).checked,
+
+            menu_url:
+              document.getElementById(
+                "menu_url"
+              ).value.trim(),
+
+            reservations_url:
+              document.getElementById(
+                "reservations_url"
+              ).value.trim(),
+
+            botones:
+              obtenerBotones()
+
+          };
+
+
+          /* =========================
+             CONSTRUIR BD
+          ========================= */
 
           const datos =
-            construirDatosBD({
-              id:
-                clienteEditando
-                  ? clienteEditando.id
-                  : null,
-
-              nombre,
-
-              slug,
-
-              categoria:
-                document.getElementById(
-                  "categoria"
-                ).value.trim(),
-
-              descripcion:
-                document.getElementById(
-                  "descripcion"
-                ).value.trim(),
-
-              logo:
-                logoUrl || "",
-
-              activo:
-                document.getElementById(
-                  "activo"
-                ).checked,
-
-              whatsapp:
-                document.getElementById(
-                  "whatsapp"
-                ).value.trim(),
-
-              telefono:
-                document.getElementById(
-                  "telefono"
-                ).value.trim(),
-
-              correo:
-                document.getElementById(
-                  "correo"
-                ).value.trim(),
-
-              direccion:
-                document.getElementById(
-                  "direccion"
-                ).value.trim(),
-
-              google_maps:
-                document.getElementById(
-                  "google_maps"
-                ).value.trim(),
-
-              sitio_web:
-                document.getElementById(
-                  "sitio_web"
-                ).value.trim(),
-
-              instagram:
-                document.getElementById(
-                  "instagram"
-                ).value.trim(),
-
-              facebook:
-                document.getElementById(
-                  "facebook"
-                ).value.trim(),
-
-              tiktok:
-                document.getElementById(
-                  "tiktok"
-                ).value.trim(),
-
-              youtube:
-                document.getElementById(
-                  "youtube"
-                ).value.trim(),
-
-              google_reviews:
-                document.getElementById(
-                  "google_reviews"
-                ).value.trim(),
-
-              mostrar_reviews:
-                document.getElementById(
-                  "mostrar_reviews"
-                ).checked,
-
-              menu_url:
-                document.getElementById(
-                  "menu_url"
-                ).value.trim(),
-
-              reservations_url:
-                document.getElementById(
-                  "reservations_url"
-                ).value.trim(),
-
-              botones:
-                obtenerBotones()
-
-            });
+            construirDatosBD(
+              datosBase
+            );
 
 
-          /* UPDATE */
+          /* =========================
+             UPDATE
+          ========================= */
 
-          if(clienteEditando){
+          if(estabaEditando){
 
             const {
+              data: actualizado,
               error
             } = await supabaseClient
               .from("client_profiles")
               .update(datos)
               .eq(
                 "id",
-                clienteEditando.id
-              );
+                idEditando
+              )
+              .select("*")
+              .single();
 
 
             if(error){
               throw error;
+            }
+
+
+            if(
+              !actualizado ||
+              String(actualizado.id) !==
+              String(idEditando)
+            ){
+
+              throw new Error(
+                "Supabase no confirmó la actualización del cliente."
+              );
+
+            }
+
+
+            /* =========================
+               VERIFICACIÓN UPDATE
+            ========================= */
+
+            const {
+              data: verificado,
+              error: errorVerificacion
+            } = await supabaseClient
+              .from("client_profiles")
+              .select(
+                "id,slug,business_name,active"
+              )
+              .eq(
+                "id",
+                idEditando
+              )
+              .maybeSingle();
+
+
+            if(errorVerificacion){
+              throw errorVerificacion;
+            }
+
+
+            if(
+              !verificado ||
+              String(verificado.id) !==
+              String(idEditando)
+            ){
+
+              throw new Error(
+                "El cliente fue actualizado, pero Supabase no pudo verificar el registro."
+              );
+
             }
 
 
@@ -3228,21 +3537,108 @@
 
           }
 
-          /* INSERT */
+
+          /* =========================
+             INSERT
+          ========================= */
 
           else{
 
+            /*
+             * MUY IMPORTANTE:
+             * No enviamos id.
+             * Supabase debe generar el UUID.
+             */
+
             delete datos.id;
 
+
             const {
+              data: nuevoCliente,
               error
             } = await supabaseClient
               .from("client_profiles")
-              .insert(datos);
+              .insert(datos)
+              .select("*")
+              .single();
 
 
             if(error){
               throw error;
+            }
+
+
+            /*
+             * Esta comprobación evita que el panel
+             * diga "Cliente creado" cuando Supabase
+             * realmente no creó el registro.
+             */
+
+            if(
+              !nuevoCliente
+            ){
+
+              throw new Error(
+                "Supabase no devolvió el cliente recién creado."
+              );
+
+            }
+
+
+            if(
+              nuevoCliente.slug !== slug
+            ){
+
+              throw new Error(
+                "Supabase creó un registro, pero el slug recibido no coincide."
+              );
+
+            }
+
+
+            /* =========================
+               VERIFICACIÓN FINAL INSERT
+            ========================= */
+
+            const {
+              data: verificado,
+              error: errorVerificacion
+            } = await supabaseClient
+              .from("client_profiles")
+              .select(
+                "id,slug,business_name,active"
+              )
+              .eq(
+                "slug",
+                slug
+              )
+              .maybeSingle();
+
+
+            if(errorVerificacion){
+              throw errorVerificacion;
+            }
+
+
+            if(
+              !verificado
+            ){
+
+              throw new Error(
+                "El cliente fue enviado, pero no quedó disponible al verificarlo en Supabase."
+              );
+
+            }
+
+
+            if(
+              verificado.slug !== slug
+            ){
+
+              throw new Error(
+                "El cliente quedó guardado, pero el identificador no coincide."
+              );
+
             }
 
 
@@ -3253,6 +3649,11 @@
           }
 
 
+          /*
+           * Solo cerramos el modal después
+           * de que Supabase haya confirmado.
+           */
+
           cerrarModal();
 
           await cargarClientes();
@@ -3260,13 +3661,37 @@
 
         }catch(error){
 
-          console.error(error);
+          console.error(
+            "ERROR COMPLETO AL GUARDAR CLIENTE:",
+            error
+          );
+
+
+          let mensaje =
+            error &&
+            error.message
+              ? error.message
+              : "No se pudo guardar el cliente.";
+
+
+          if(
+            error &&
+            error.code
+          ){
+
+            mensaje +=
+              " [Código: " +
+              error.code +
+              "]";
+
+          }
+
 
           mostrarToast(
-            error.message ||
-            "No se pudo guardar el cliente.",
+            mensaje,
             true
           );
+
 
         }finally{
 
@@ -3274,7 +3699,7 @@
             false;
 
           btnGuardar.textContent =
-            clienteEditando
+            estabaEditando
               ? "Guardar cambios"
               : "Guardar cliente";
 
@@ -3292,14 +3717,11 @@
 
       return {
 
-        id:
-          cliente.id || undefined,
-
         slug:
-          cliente.slug,
+          cliente.slug || "",
 
         business_name:
-          cliente.nombre,
+          cliente.nombre || "",
 
         tagline:
           "",
@@ -3881,7 +4303,9 @@
               "none";
 
           },
-          3500
+          error
+            ? 7000
+            : 3500
         );
 
     }
